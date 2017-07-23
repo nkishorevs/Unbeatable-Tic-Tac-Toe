@@ -16,41 +16,30 @@ class Move:
 class AI_Player:
 
     def getBestMove(self, curr_board, player, alpha = -INF, beta = INF):
-        #print("function getBestMove: ")
-        #base case
-        #for move in curr_board.board:
-        #    print(move,end="-")
+        #alpha -> the best score so far along the path to root for the maximizer node(i.e., the AI player)
+        #beta -> the best score so far along the path to root for minimizer node.
+        # v -> score at current node
         winner = curr_board.checkWin()
-        #print("winner: ", winner)
+        
         if winner == board.AI_MOVE:
-            #for move in curr_board.board:
-            #    print(move,end="-")
-            #print(winner)
             return Move(10)
         elif winner == board.PLAYER_MOVE:
-            #for move in curr_board.board:
-            #    print(move,end="-")
-            #print(winner)
             return Move(-10)
         elif winner == board.NO_VAL:
-            #for move in curr_board.board:
-            #    print(move,end="-")
-            #print(winner)
             return Move(0)
 
         moves = list()
         v = int()
-        #depth+=1
-        #check all possible moves and score them
+        
         for i in range(board.BOARD_SIZE):
             for j in range(board.BOARD_SIZE):
                 if curr_board.board[i][j] == board.BLANK_MOVE:
-                    #print(depth, "in IF",winner, i, j)
                     curr_board.setMove(i,j,player)
                     move = Move()
                     move.x = i
                     move.y = j
                     if player == board.AI_MOVE:
+                        #initialise v to worst case for maximiser
                         v = -INF
                         tempMove = self.getBestMove(curr_board, board.PLAYER_MOVE, alpha,beta)
                         move.score = tempMove.score
@@ -59,6 +48,7 @@ class AI_Player:
                         if alpha < v:
                             alpha = v
                     else:
+                        #initialise v to worst case for minimiser
                         v = INF
                         tempMove = self.getBestMove(curr_board, board.AI_MOVE, alpha, beta)
                         move.score = tempMove.score
@@ -66,10 +56,11 @@ class AI_Player:
                             v  = move.score
                         if beta > v:
                             beta = v
-                    #print("Appending :",move.x, move.y, move.score)
+                   
                     moves.append(move)
-                    #print("len",len(moves))
-                    curr_board.setMove(i,j,board.BLANK_MOVE)
+                    curr_board.setMove(i,j,board.BLANK_MOVE)    #bactrack the move
+                    
+                    #check the condition for pruning
                     if (player == board.AI_MOVE and v>beta) or (player == board.AI_MOVE and v <alpha):
                         #print("Pruned at ",i, j)
                         break;
@@ -82,7 +73,6 @@ class AI_Player:
         if player == board.AI_MOVE:
             bestScore = -INF
             for i in range(len(moves)):
-                #print(moves[i].x,moves[i].y, moves[i].score, bestScore,moveInd, end =" : ")
                 if moves[i].score > bestScore:
                     moveInd = i
                     bestScore = moves[i].score
@@ -92,5 +82,6 @@ class AI_Player:
                 if moves[i].score < bestScore:
                     moveInd = i
                     bestScore = moves[i].score
-        #print(str(depth)+"th",moveInd, len(moves), winner)
+        
+        #return the best move if any move found, if pruned before that return v as the score
         return moves[moveInd] if moveInd!=-1 else Move(v)
