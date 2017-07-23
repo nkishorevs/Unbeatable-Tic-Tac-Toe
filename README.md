@@ -17,6 +17,8 @@ In the '/classes' folder,
 
   ai_pruned.py  -> this is the MiniMax algo along with Alpha-Beta pruning optimization.
   
+  check out this video to know how Alpha-Beta pruning works: https://www.youtube.com/watch?v=xBXHtz4Gbdo
+  
   ai.py         -> this is MiniMax without pruning.
   
   board.py      -> this is the class that implements the grid for tic-tac-toe, checking win status etc.
