@@ -1,7 +1,9 @@
 import pygame
 import random
-from classes import board, ai_pruned
-
+from classes import board
+from classes import ai_pruned   #change this: 'ai'  -> MiniMax without pruning
+                                #       'ai_pruned' -> MiniMax with Alpha-Beta pruning
+#constants
 DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 656
 WHITE = (255,255,255)
@@ -17,12 +19,7 @@ MAP_TO_PIX = {(0,0):(126,76), (0,1):(308,76), (0,2):(486,76),
               (1,0):(126,258), (1,1):(308,258), (1,2):(486,258),
               (2,0):(126,436), (2,1):(308,436), (2,2):(486,436)}
 
-
-#def displayText(message, displacement):
-#    text = font.render(message, True, GREEN)
-#    textSize = text.get_size()
-#    gameDisplay.blit(text, (DISPLAY_WIDTH-textSize[0]/2, DISPLAY_HEIGHT - displacement))
-
+#pygame initialising
 pygame.init()
 running = True
 XLFont = pygame.font.SysFont("consolas", 46)
@@ -35,6 +32,7 @@ imgGrid = pygame.image.load("images/grid.png")
 imgHead = pygame.image.load("images/header.png")
 gameDisplay = pygame.display.set_mode([DISPLAY_WIDTH,DISPLAY_HEIGHT])
 
+
 class Game:
     def __init__(self):
         gameDisplay.fill(WHITE)
@@ -44,7 +42,7 @@ class Game:
         gameDisplay.blit(txtBy,(DISPLAY_WIDTH-txtBy.get_width()-6, DISPLAY_HEIGHT-txtBy.get_height()))
         self.turn = 0
         self.board = board.Board()
-        self.bot = ai_pruned.AI_Player()
+        self.bot = ai_pruned.AI_Player() ## change 'ai/ai_pruned' here also to change algo
         pygame.display.update()
 
     def reset(self):
@@ -55,7 +53,7 @@ class Game:
         gameDisplay.blit(txtBy,(DISPLAY_WIDTH-txtBy.get_width()-6, DISPLAY_HEIGHT-txtBy.get_height()))
         self.turn = 0
         self.board = board.Board()
-        self.bot = ai_pruned.AI_Player()
+        self.bot = ai_pruned.AI_Player()    ## change 'ai/ai_pruned' here also to change algo
         pygame.display.update()
 
     def checkPlace(self, x,y):

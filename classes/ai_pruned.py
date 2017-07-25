@@ -8,10 +8,6 @@ class Move:
         self.y = -1
         self.score = score
 
-    def copy(self, move):
-        self.x= move.x
-        self.y = move.y
-        self.score = move.score
 
 class AI_Player:
 
@@ -28,11 +24,13 @@ class AI_Player:
         elif winner == board.NO_VAL:
             return Move(0)
 
+        #moves will store the list of possible moves and their score
         moves = list()
         v = int()
         
         for i in range(board.BOARD_SIZE):
             for j in range(board.BOARD_SIZE):
+                #find a possible move,i.e., a blank place
                 if curr_board.board[i][j] == board.BLANK_MOVE:
                     curr_board.setMove(i,j,player)
                     move = Move()
@@ -41,8 +39,7 @@ class AI_Player:
                     if player == board.AI_MOVE:
                         #initialise v to worst case for maximiser
                         v = -INF
-                        tempMove = self.getBestMove(curr_board, board.PLAYER_MOVE, alpha,beta)
-                        move.score = tempMove.score
+                        move.score = self.getBestMove(curr_board, board.AI_MOVE, alpha, beta).score
                         if v<move.score:
                             v = move.score
                         if alpha < v:
@@ -50,13 +47,13 @@ class AI_Player:
                     else:
                         #initialise v to worst case for minimiser
                         v = INF
-                        tempMove = self.getBestMove(curr_board, board.AI_MOVE, alpha, beta)
-                        move.score = tempMove.score
+                        move.score = self.getBestMove(curr_board, board.AI_MOVE, alpha, beta).score
                         if v > move.score:
                             v  = move.score
                         if beta > v:
                             beta = v
-                   
+
+                    #add move to the moves list
                     moves.append(move)
                     curr_board.setMove(i,j,board.BLANK_MOVE)    #bactrack the move
                     
@@ -68,20 +65,17 @@ class AI_Player:
                 break;
 
 
-        #find the best move
-        moveInd = -1
+        #find the best move from moves list
+        bestMove = Move()
         if player == board.AI_MOVE:
-            bestScore = -INF
             for i in range(len(moves)):
-                if moves[i].score > bestScore:
-                    moveInd = i
-                    bestScore = moves[i].score
+                if moves[i].score > bestMove.score:
+                    bestMove = moves[i]
         else:
             bestScore = INF
             for i in range(len(moves)):
-                if moves[i].score < bestScore:
-                    moveInd = i
-                    bestScore = moves[i].score
+                if moves[i].score < bestMove.score:
+                    bestMove = moves[i]
         
         #return the best move if any move found, if pruned before that return v as the score
-        return moves[moveInd] if moveInd!=-1 else Move(v)
+        return bestMove if bestMove.score!=-1 else Move(v)
