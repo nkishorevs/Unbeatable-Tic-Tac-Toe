@@ -1,7 +1,7 @@
 BOARD_SIZE = 3
 PLAYER_MOVE = 1
 AI_MOVE = 2
-NO_VAL = 3
+TIE = 3
 BLANK_MOVE = 0
 
 class Board:
@@ -47,6 +47,6 @@ class Board:
                     isTie = False
                     break
         if isTie:
-            return NO_VAL
+            return TIE
         else:
             return -1

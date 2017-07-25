@@ -1,7 +1,7 @@
 import pygame
 import random
 from classes import board
-from classes import ai_pruned   #change this: 'ai'  -> MiniMax without pruning
+from classes import ai_pruned #change this: 'ai'  -> MiniMax without pruning
                                 #       'ai_pruned' -> MiniMax with Alpha-Beta pruning
 #constants
 DISPLAY_WIDTH = 800
@@ -149,7 +149,7 @@ if __name__ == '__main__':
             running = game.endGame("AI Wins!!")
         elif winner == board.PLAYER_MOVE:
             running = game.endGame("You Win!!")
-        elif winner == board.NO_VAL:
+        elif winner == board.TIE:
             running = game.endGame("Its a TIE!")
 
         pygame.display.update()

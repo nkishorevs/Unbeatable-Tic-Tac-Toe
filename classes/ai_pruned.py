@@ -3,7 +3,7 @@ from classes import board
 INF = 9999
 
 class Move:
-    def __init__(self, score=-1):
+    def __init__(self, score=-INF):
         self.x= -1
         self.y = -1
         self.score = score
@@ -21,7 +21,7 @@ class AI_Player:
             return Move(10)
         elif winner == board.PLAYER_MOVE:
             return Move(-10)
-        elif winner == board.NO_VAL:
+        elif winner == board.TIE:
             return Move(0)
 
         #moves will store the list of possible moves and their score
@@ -39,7 +39,7 @@ class AI_Player:
                     if player == board.AI_MOVE:
                         #initialise v to worst case for maximiser
                         v = -INF
-                        move.score = self.getBestMove(curr_board, board.AI_MOVE, alpha, beta).score
+                        move.score = (self.getBestMove(curr_board, board.PLAYER_MOVE, alpha, beta)).score
                         if v<move.score:
                             v = move.score
                         if alpha < v:
@@ -47,7 +47,7 @@ class AI_Player:
                     else:
                         #initialise v to worst case for minimiser
                         v = INF
-                        move.score = self.getBestMove(curr_board, board.AI_MOVE, alpha, beta).score
+                        move.score = (self.getBestMove(curr_board, board.AI_MOVE, alpha, beta)).score
                         if v > move.score:
                             v  = move.score
                         if beta > v:
@@ -68,14 +68,15 @@ class AI_Player:
         #find the best move from moves list
         bestMove = Move()
         if player == board.AI_MOVE:
+            bestMove.score = -INF
             for i in range(len(moves)):
                 if moves[i].score > bestMove.score:
                     bestMove = moves[i]
         else:
-            bestScore = INF
+            bestMove.score = INF
             for i in range(len(moves)):
                 if moves[i].score < bestMove.score:
                     bestMove = moves[i]
         
         #return the best move if any move found, if pruned before that return v as the score
-        return bestMove if bestMove.score!=-1 else Move(v)
+        return bestMove if abs(bestMove.score)!=INF else Move(v)

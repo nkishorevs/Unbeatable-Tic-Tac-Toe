@@ -17,7 +17,7 @@ class AI_Player:
             return Move(10)
         elif winner == board.PLAYER_MOVE:
             return Move(-10)
-        elif winner == board.NO_VAL:
+        elif winner == board.TIE:
             return Move(0)
 
         #moves list will store the list of possible moves and their score
@@ -33,21 +33,24 @@ class AI_Player:
                     move.x = i
                     move.y = j
                     if player == board.AI_MOVE:
-                        move.score = self.getBestMove(curr_board, board.AI_MOVE, alpha, beta).score
+                        tempMove = self.getBestMove(curr_board, board.PLAYER_MOVE)
+                        move.score = tempMove.score
                     else:
-                        move.score = self.getBestMove(curr_board, board.AI_MOVE, alpha, beta).score
-
+                        tempMove = self.getBestMove(curr_board, board.AI_MOVE)
+                        move.score = tempMove.score
+                        
                     moves.append(move)
                     curr_board.setMove(i,j,board.BLANK_MOVE)
 
         #find the best move
         bestMove = Move()
         if player == board.AI_MOVE:
+            bestMove.score = -INF
             for i in range(len(moves)):
                 if moves[i].score > bestMove.score:
                     bestMove = moves[i]
         else:
-            bestScore = INF
+            bestMove.score = INF
             for i in range(len(moves)):
                 if moves[i].score < bestMove.score:
                     bestMove = moves[i]
