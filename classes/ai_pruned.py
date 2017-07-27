@@ -16,7 +16,7 @@ class AI_Player:
         #beta -> the best score so far along the path to root for minimizer node.
         # v -> score at current node
         winner = curr_board.checkWin()
-        
+
         if winner == board.AI_MOVE:
             return Move(10)
         elif winner == board.PLAYER_MOVE:
@@ -27,7 +27,7 @@ class AI_Player:
         #moves will store the list of possible moves and their score
         moves = list()
         v = int()
-        
+
         for i in range(board.BOARD_SIZE):
             for j in range(board.BOARD_SIZE):
                 #find a possible move,i.e., a blank place
@@ -56,12 +56,12 @@ class AI_Player:
                     #add move to the moves list
                     moves.append(move)
                     curr_board.setMove(i,j,board.BLANK_MOVE)    #bactrack the move
-                    
+
                     #check the condition for pruning
-                    if (player == board.AI_MOVE and v>beta) or (player == board.AI_MOVE and v <alpha):
+                    if (player == board.AI_MOVE and v>beta) or (player == board.PLAYER_MOVE and v <alpha):
                         #print("Pruned at ",i, j)
                         break;
-            if (player == board.AI_MOVE and v>beta) or (player == board.AI_MOVE and v <alpha):
+            if (player == board.AI_MOVE and v>beta) or (player == board.PLAYER_MOVE and v <alpha):
                 break;
 
 
@@ -77,6 +77,6 @@ class AI_Player:
             for i in range(len(moves)):
                 if moves[i].score < bestMove.score:
                     bestMove = moves[i]
-        
+
         #return the best move if any move found, if pruned before that return v as the score
         return bestMove if abs(bestMove.score)!=INF else Move(v)
